@@ -22,6 +22,17 @@ Features :
 - Unicode font loading / rendering
 - Image loading / rendering
 
+
+Here is an example of what the library can do :
+
+
+<p align="center">
+<img src="res/github_alesia.png" >
+</p>
+
+
+
+
 TODO :
 - Anti-aliasing for Bezier curves (already implemented for lines, but disabled for now)
 - Bezier-bezier intersection for a direct polygon operation (instead of appliying operations on lines)
