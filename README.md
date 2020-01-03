@@ -1,7 +1,7 @@
 # Alesia
 
 
-![Alesia Logo](alesia.png)
+<img align="center" src="alesia.png" >
 
 Alesia is light and simple rendering library with no dependencies written in C. Just add the content of the src folder and you're good to go!
 
