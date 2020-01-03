@@ -32,7 +32,7 @@ Here is an example of what the library can do :
 </p>
 
 
-Functions :
+<b>API :</b>
 
 | Function name |          Explanation  |
 |-------------------------------------------------------------------- |------------------------------|
@@ -70,7 +70,7 @@ Functions :
 <br>
 <br>
 
-TODO :
+<b>TODO :</b>
 - Anti-aliasing for Bezier curves (already implemented for lines, but disabled for now)
 - Bezier-bezier intersection for a direct polygon operation (instead of appliying operations on lines)
 - Gradiant
