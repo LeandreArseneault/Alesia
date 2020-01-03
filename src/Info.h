@@ -1,0 +1,9 @@
+#ifndef INFO_H_INCLUDED
+#define INFO_H_INCLUDED
+
+#define RENDER_MAX_WIDTH 1920
+#define RENDER_MAX_HEIGHT 1080
+
+
+
+#endif // INFO_H_INCLUDED
