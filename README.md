@@ -13,8 +13,8 @@ Alesia is light and simple rendering library with no dependencies written in C.
 
 <br>
 
-To use it just add the content of the src folder and you're good to go!
-The library requires STB_FONT and STB_IMAGE to run. They are directly included inside the sources. We recommend using a library like SDL for the windowing.
+To use it just add the content of the src folder to your project and you're good to go!
+The library requires STB_FREETYPE and STB_IMAGE to run. They are directly included inside the sources. We recommend using a library like SDL for the windowing.
 
 
 Features :
