@@ -35,6 +35,7 @@ Functions :
 
 | Function name |          Explanation  |
 |-------------------------------------------------------------------- |------------------------------|
+|<b>Surface</b>||
 |AlesiaSurface* alesia__createSurface(int w,int h)|Create a renderable surface |
 |void alesia__destroySurface(AlesiaSurface* surface)|Free from memory the surface|
 |void alesia__blitSurface(AlesiaSurface* dest,AlesiaSurface* src,int destX,int destY)|Blit a given surface to another one|
@@ -42,7 +43,7 @@ Functions :
 |void alesia__blendSurfaceColor(AlesiaSurface* surface,int x,int y,AlesiaColor color)|Blend a specific pixel with his actual color|
 |void alesia__clearColor(AlesiaSurface* surface,AlesiaColor color)|Clear all of the surface with the given color|
 |AlesiaColor alesia__getSurfaceColor(AlesiaSurface* surface,int x,int y)|Get the pixel color at X and Y|
-|||
+|<b>Paint</b>||
 |AlesiaPaint* alesia__createPaint()|Create a paint used for rendering|
 |void alesia__destroyPaint(AlesiaPaint* paint)|Free the paint|
 |void alesia__setFontSize(AlesiaPaint* paint,float size)|Set the size of the font when rendering text|
@@ -56,8 +57,9 @@ Functions :
 |void alesia__addBezier(AlesiaPaint* paint,float xc,float yc,float x2,float y2)|Add a bezier defined by 1 control point to the working path|
 |void alesia__addBezierCubic(AlesiaPaint* paint,float x1,float y1,float x2,float y2,float x3,float y3)| Add e bezier defined by 2 controls points to the working path|
 |void alesia__fill(AlesiaSurface* surface,AlesiaPaint* paint)|Fill the surface with the defined path|
-|||
+|<b>Image</b>||
 |AlesiaSurface* alesia__loadImage(void* data,int size)|Load an image from the data memory buffer. The buffer can be freed after the call|
+|<b>Font</b>||
 |AlesiaFont* alesia__loadFont(void* data,int size)|Load a font from the data memory buffer. The buffer can be freed after the call|
 |void alesia__destroyFont(AlesiaFont* font)|Free the font from memory|
 |void alesia__text(AlesiaPaint* paint,AlesiaSurface* surface,AlesiaFont* font,float x,float y,char* txt)|Render a text on the given surface. Fill does not need to be call after this function to render|
