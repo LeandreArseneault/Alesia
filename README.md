@@ -34,7 +34,7 @@ Here is an example of what the library can do :
 Functions :
 
 | Function name |          Explanation  |
-|----------------------------------- |------------------------------|
+|-------------------------------------------------------------------- |------------------------------|
 |AlesiaSurface* alesia__createSurface(int w,int h)|Create a renderable surface |
 |void alesia__destroySurface(AlesiaSurface* surface)|Free from memory the surface|
 |void alesia__blitSurface(AlesiaSurface* dest,AlesiaSurface* src,int destX,int destY)|Blit a given surface to another one|
