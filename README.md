@@ -17,7 +17,7 @@ To use it just add the content of the src folder to your project and you're good
 The library requires STB_FREETYPE and STB_IMAGE to run. They are directly included inside the sources. We recommend using a library like SDL for the windowing.
 
 
-Features :
+<b>Features :</b>
 - Shape rendering (Union / XOR)
 - Alpha blending
 - Unicode font loading / rendering (ttf)
