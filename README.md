@@ -11,8 +11,10 @@ Alesia is light and simple rendering library with no dependencies written in C.
 <img src="alesia.png" >
 </p>
 
+<br>
+
 To use it just add the content of the src folder and you're good to go!
-The library requires STB_FONT and STB_IMAGE to run. They are directly included inside the sources.
+The library requires STB_FONT and STB_IMAGE to run. They are directly included inside the sources. We recommence to use a library like for the windowing if needed.
 
 
 Features :
@@ -24,6 +26,8 @@ TODO :
 - Anti-aliasing for Bezier curves (already implemented for lines, but disabled for now)
 - Bezier-bezier intersection for a direct polygon operation (instead of appliying operations on lines)
 - Gradiant
+- Shape stroke
 - Source surface rotation
 - Font underline / bold / italic
 - Surface export using stb_image_write
+- Optional alpha on surface
