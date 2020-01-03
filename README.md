@@ -36,7 +36,7 @@ Functions :
 | Function name |          Explanation  |
 |----------------------------------- |------------------------------|
 |AlesiaSurface* alesia__createSurface(int w,int h)|Create a renderable surface |
-|void alesia__destroySurface(AlesiaSurface* surface)|Free frome memory the surface|
+|void alesia__destroySurface(AlesiaSurface* surface)|Free from memory the surface|
 |void alesia__blitSurface(AlesiaSurface* dest,AlesiaSurface* src,int destX,int destY)|Blit a given surface to another one|
 |void alesia__setSurfaceColor(AlesiaSurface* surface,int x,int y,AlesiaColor color)|Set a specific pixel on the surface|
 |void alesia__blendSurfaceColor(AlesiaSurface* surface,int x,int y,AlesiaColor color)|Blend a specific pixel with his actual color|
