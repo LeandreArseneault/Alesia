@@ -1,7 +1,9 @@
 # Alesia
 
 Alesia is light and simple rendering library with no dependencies written in C.
-
+ <br>
+ <br>
+ <br>
 
 
 
@@ -10,8 +12,7 @@ Alesia is light and simple rendering library with no dependencies written in C.
 </p>
 
 To use it just add the content of the src folder and you're good to go!
-
-The library requires STB_FONT and STB_IMAGE to run. They are directly includes inside the sources.
+The library requires STB_FONT and STB_IMAGE to run. They are directly included inside the sources.
 
 
 Features :
