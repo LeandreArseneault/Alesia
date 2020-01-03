@@ -19,6 +19,7 @@ The library requires STB_FREETYPE and STB_IMAGE to run. They are directly includ
 
 Features :
 - Shape rendering (Union / XOR)
+- Alpha blending
 - Unicode font loading / rendering (ttf)
 - Image loading / rendering (png,jpg,jpeg...)
 
