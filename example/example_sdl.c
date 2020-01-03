@@ -8,19 +8,6 @@
 
 #include <unistd.h>
 
-void* readAllFile(char* path,int* size)
-{
-    FILE *f = fopen(path, "rb");
-    fseek(f, 0, SEEK_END);
-    long fsize = ftell(f);
-    fseek(f, 0, SEEK_SET);
-    *size = (int) fsize;
-    void *data = malloc(fsize);
-    fread(data, 1, fsize, f);
-    fclose(f);
-    return data;
-}
-
 int main(int argc,char* argv[])
 {
 
