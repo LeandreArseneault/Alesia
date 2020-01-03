@@ -1,7 +1,7 @@
 # Alesia
 
 
-[Alesia Logo](/res/alesia.png)
+![Alesia Logo](https://octodex.github.com/images/yaktocat.png)
 
 Alesia is light and simple rendering library with no dependencies written in C. Just add the content of the src folder and you're good to go!
 
