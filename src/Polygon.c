@@ -61,6 +61,10 @@ void alesia__polygon__addCurve(AlesiaPolygon* polygon,float xc,float yc,float xc
     vertex.yc2 = yc2;
     vertex.xc = xc;
     vertex.yc = yc;
+    vertex.bezier.p1 = vertex.begin;
+    vertex.bezier.p4 = vertex.end;
+    vertex.bezier.p2 = priv__alesia__makePoint(xc,yc);
+    vertex.bezier.p3 = priv__alesia__makePoint(xc2,yc2);
     priv__alesia__polygon__addVertex(polygon,vertex);
 
     polygon->lastX = endX;
@@ -77,4 +81,87 @@ void alesia__polygon__addCurve(AlesiaPolygon* polygon,float xc,float yc,float xc
     polygon->minWidth = MAX(polygon->minWidth,xc);
     polygon->minWidth = MAX(polygon->minWidth,xc2);
     polygon->minWidth = MAX(polygon->minWidth,endX);
+}
+
+AlesiaPolygon* priv__alesia__operatePolygon(AlesiaOperation op,AlesiaPolygon* base,AlesiaPolygon* operand)
+{
+    AlesiaPolygon* result = alesia__polygon__createPolygon(base->initX,base->initY);
+
+    int i,j;
+
+    for(i = 0; i < base->vertexCount;i++)
+    {
+        for(j = 0;j < operand->vertexCount;j++)
+        {
+            AlesiaVertex* operandVertex = &operand->vertex[j];
+            AlesiaVertex* baseVertex = &base->vertex[i];
+
+            AlesiaPoint points[10];
+            int collisionCount = priv__alesia__vertexIntersect(*operandVertex,*baseVertex,&points);
+            int k;
+            for(k = 0;k < collisionCount;k++)
+            {
+                //we split the operand vertice
+                if(baseVertex->type == ALESIA_LINE)
+                {
+
+                }
+            }
+
+            if(collisionCount == 0) //No collision we add the vertex directly
+            {
+                priv__alesia__polygon__addVertex(result,*baseVertex);
+            }
+        }
+    }
+
+
+    return result;
+}
+
+int priv__alesia__vertexIntersect(AlesiaVertex v1,AlesiaVertex v2,AlesiaPoint* points)
+{
+    AlesiaPoint* p1 = NULL;
+    AlesiaPoint* p2 = NULL;
+    AlesiaPoint* p3 = NULL;
+    AlesiaPoint* p4 = NULL;
+    AlesiaBezier* bez1 = NULL;
+    AlesiaBezier* bez2 = NULL;
+
+    if(v1.type == ALESIA_LINE)
+    {
+        p1 = &v1.begin;
+        p2 = &v1.end;
+    }
+    else if(v1.type == ALESIA_BEZIER)
+    {
+        bez1 = &v1.bezier;
+    }
+
+    if(v2.type == ALESIA_LINE)
+    {
+        if(p1 == NULL)
+        {
+            p1 = &v2.begin;
+            p2 = &v2.end;
+        }
+        else
+        {
+            p3 = &v2.begin;
+            p4 = &v2.end;
+        }
+    }
+    else if(v2.type == ALESIA_BEZIER)
+    {
+        if(bez1 == NULL)
+            bez1 = &v2.bezier;
+        else
+            bez2 = &v2.begin;
+    }
+
+    if(bez1 != NULL & bez2 != NULL)
+        return priv__alesia__bezierBezierIntersect(*bez1,*bez2,points);
+    else if(p1 != NULL && p3 != NULL)
+        return priv__alesia__lineIntersect(*p1,*p2,*p3,*p4,points);
+    return priv__alesia__bezierLineIntersect(*p1,*p2,*bez1,points);
 }

@@ -27,6 +27,7 @@ typedef struct
     float xc2;
     float yc2;
 
+    AlesiaBezier bezier;
     AlesiaPoint begin;
     AlesiaPoint end;
 }AlesiaVertex;
@@ -60,5 +61,9 @@ void alesia__polygon__addLine(AlesiaPolygon* polygon,int x2,int y2);
 void alesia__polygon__addCurve(AlesiaPolygon* polygon,float xc,float yc,float xc2,float yc2,int endX,int endY);
 
 void priv__alesia__polygon__addVertex(AlesiaPolygon* polygon,AlesiaVertex vertex);
+
+AlesiaPolygon* priv__alesia__operatePolygon(AlesiaOperation op,AlesiaPolygon* base,AlesiaPolygon* operand);
+
+int priv__alesia__vertexIntersect(AlesiaVertex v1,AlesiaVertex v2,AlesiaPoint* points);
 
 #endif // POLYGON_H_INCLUDED

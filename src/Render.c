@@ -295,7 +295,8 @@ int priv__alesia__fillLine(AlesiaPolygon* polygon,float* line,AlesiaVertex** ver
                 end = buffer;
             }
 
-            if(priv__alesia__lineIntersect(p1,p2,begin,end) == TRUE)
+            AlesiaPoint p;
+            if(priv__alesia__lineIntersect(p1,p2,begin,end,&p) == TRUE)
             {
                 float xValue = priv__alesia__getLineDomainAbs(begin,end,y);
                 verticesCollisionCount = addVertice(line,vertices,verticesCollisionCount,vertex,xValue);

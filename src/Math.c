@@ -40,6 +40,11 @@ float priv__alesia__computeBezier(float x0,float x1,float x2,float x3,float t)
     return (1.f-t)*(1.f-t)*(1.f-t)*x0 + 3.f*(1.f-t)*(1.f-t)*t*x1 + 3.f*(1.f-t)*t*t*x2 + t*t*t*x3;
 }
 
+AlesiaPoint priv__alesia__computeBezierXY(AlesiaBezier bezier,float t)
+{
+    return priv__alesia__makePoint(priv__alesia__computeBezier(bezier.p1.x,bezier.p2.x,bezier.p3.x,bezier.p4.x,t),priv__alesia__computeBezier(bezier.p1.y,bezier.p2.y,bezier.p3.y,bezier.p4.y,t));
+}
+
 AlesiaRect priv__alesia__bezierRect(AlesiaBezier bez)
 {
     AlesiaRect result;
@@ -65,7 +70,7 @@ AlesiaRect priv__alesia__bezierRect(AlesiaBezier bez)
     return result;
 }
 
-int priv__alesia__bezierLineIntersect(AlesiaPoint l1,AlesiaPoint l2,AlesiaBezier bezier,float* finalT)
+int priv__alesia__bezierLineIntersect(AlesiaPoint l1,AlesiaPoint l2,AlesiaBezier bezier,AlesiaPoint* collision)
 {
     //for simplicity, we use the same algoritm by create a fake bezier that is our "line"
     AlesiaBezier fakeBezier;
@@ -79,60 +84,84 @@ int priv__alesia__bezierLineIntersect(AlesiaPoint l1,AlesiaPoint l2,AlesiaBezier
     fakeBezier.t = 1;
     bezier.t = 1;
 
-    return priv__alesia__bezierBezierIntersect(fakeBezier,bezier,finalT);
+    return priv__alesia__bezierBezierIntersect(fakeBezier,bezier,collision);
 }
 
-int priv__alesia__bezierBezierIntersect(AlesiaBezier bezier1,AlesiaBezier bezier2,float* finalT)
+int priv__alesia__bezierBezierIntersect(AlesiaBezier bezier1,AlesiaBezier bezier2,AlesiaPoint* collision)
 {
-    const float treshold = 1.f;
-    AlesiaRect rect1 = priv__alesia__bezierRect(bezier1);
-    AlesiaRect rect2 = priv__alesia__bezierRect(bezier2);
+    int result = 0;
+    const int div = 20;
 
-    //if they don't intersect, we don't bother with it
-    if(priv__alesia__rectIntersect(rect1,rect2) == TRUE)
+    float i,j;
+    for(i = 1;i <= div;i++)
+    {
+        for(j = 1;j <= div;j++)
+        {
+
+            AlesiaPoint bez1Start = priv__alesia__computeBezierXY(bezier1, (i - 1.f) / div);
+            AlesiaPoint bez1End = priv__alesia__computeBezierXY(bezier1,i / div);
+
+
+            AlesiaPoint bez2Start = priv__alesia__computeBezierXY(bezier2, (j - 1.f) / div);
+            AlesiaPoint bez2End = priv__alesia__computeBezierXY(bezier2, j / div);
+
+            AlesiaPoint colP;
+            if(priv__alesia__lineIntersect(bez1Start,bez1End,bez2Start,bez2End,&colP) == TRUE)
+            {
+                collision[result] = colP;
+                result++;
+            }
+
+        }
+
+    }
+
+    return result;
+}
+
+
+int priv__alesia__lineIntersect(AlesiaPoint p1,AlesiaPoint p2,AlesiaPoint p3,AlesiaPoint p4,AlesiaPoint* collision)
+{
+    float a1 =  priv__alesia__computeLineIncreaseRate(p1,p2);
+    float a2 = priv__alesia__computeLineIncreaseRate(p3,p4);
+
+
+    if(a1 == 0.f || a2 == 0.f) //from this case, special case
     {
 
-        if(priv__alesia__rectArea(rect1) + priv__alesia__rectArea(rect2) <= treshold) // collision detected with the precision required
+        //two horizontal lines is false
+        if(p1.y == p2.y && p3.y == p4.y)
+            return FALSE;
+
+        //two vertical is also false
+        if(p1.x == p2.x && p3.x == p4.x)
+            return FALSE;
+
+        //one vertical and one horizontal is true
+        if(p1.y == p2.y && p3.x == p4.x)
         {
-            if(finalT != NULL)
-                *finalT = bezier2.t;
+            collision->x = p1.x;
+            collision->y = p3.y;
             return TRUE;
         }
 
+        //one vertical and one horizontal is true
+        if(p1.x == p2.x && p3.y == p4.y)
+        {
+            collision->x = p3.x;
+            collision->y = p1.y;
+            return TRUE;
+        }
 
-        AlesiaBezier b1a;
-        AlesiaBezier b1b;
-        priv__alesia__splitBezier(bezier1,0.5f,&b1a,&b1b);
-
-        AlesiaBezier b2a;
-        AlesiaBezier b2b;
-        priv__alesia__splitBezier(bezier2,0.5f,&b2a,&b2b);
-
-        return priv__alesia__bezierBezierIntersect(b1a, b2a,finalT) ||
-        priv__alesia__bezierBezierIntersect(b1a, b2b,finalT) ||
-        priv__alesia__bezierBezierIntersect(b1b, b2a,finalT) ||
-        priv__alesia__bezierBezierIntersect(b1b, b2b,finalT);
     }
 
-    return FALSE;
-}
+    float b1 = p1.y - (p1.x * a1);
+    float b2 = p3.y - (p3.x * a2);
 
+    collision->x = (b2 + a1 + b1) / a2;
+    collision->y = a1 *  collision->x + b1;
 
-int priv__alesia__lineIntersect(AlesiaPoint p1,AlesiaPoint p2,AlesiaPoint p3,AlesiaPoint p4)
-{
-  float ua = 0.0;
-  float ub = 0.0;
-  float ud = (p4.y - p3.y) * (p2.x - p1.x) - (p4.x - p3.x) * (p2.y - p1.y);
-
-  if (ud != 0.0) {
-    ua = ((p4.x - p3.x) * (p1.y - p3.y) - (p4.y - p3.y) * (p1.x - p3.x)) / ud;
-    ub = ((p2.x - p1.x) * (p1.y - p3.y) - (p2.y - p1.y) * (p1.x - p3.x)) / ud;
-        if (ua < 0.0 || ua >= 1.0 || ub < 0.0 || ub >= 1.0) ua = 0.0;
-  }
-
-  if(ua >0.0)
     return TRUE;
-  return FALSE;
 }
 
 float priv__alesia__computeLineIncreaseRate(AlesiaPoint p1,AlesiaPoint p2)
@@ -347,4 +376,3 @@ int priv__alesia__getBezierTForValue(float pa,float pb,float pc,float pd,float x
     }
     return result;
 }
-

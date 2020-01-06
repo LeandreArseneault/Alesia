@@ -10,7 +10,6 @@
 
 int main(int argc,char* argv[])
 {
-
 	SDL_Window* window =  SDL_CreateWindow("Alesia example",0,0,800,600,0);
 
 	AlesiaSurface* libSurface = alesia__createSurface(1920,1080);

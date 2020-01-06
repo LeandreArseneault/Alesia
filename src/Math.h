@@ -43,13 +43,15 @@ void priv__alesia__splitBezier(AlesiaBezier bezierToSplit,float t,AlesiaBezier* 
 
 float priv__alesia__computeBezier(float x0,float x1,float x2,float x3,float t);
 
+AlesiaPoint priv__alesia__computeBezierXY(AlesiaBezier bezier,float t);
+
 AlesiaRect priv__alesia__bezierRect(AlesiaBezier bez);
 
-int priv__alesia__bezierLineIntersect(AlesiaPoint l1,AlesiaPoint l2,AlesiaBezier bezier,float* finalT);
+int priv__alesia__bezierLineIntersect(AlesiaPoint l1,AlesiaPoint l2,AlesiaBezier bezier,AlesiaPoint* collision);
 
-int priv__alesia__bezierBezierIntersect(AlesiaBezier bezier1,AlesiaBezier bezier2,float* finalT);
+int priv__alesia__bezierBezierIntersect(AlesiaBezier bezier1,AlesiaBezier bezier2,AlesiaPoint* collision);
 
-int priv__alesia__lineIntersect(AlesiaPoint p1,AlesiaPoint p2,AlesiaPoint p3,AlesiaPoint p4);
+int priv__alesia__lineIntersect(AlesiaPoint p1,AlesiaPoint p2,AlesiaPoint p3,AlesiaPoint p4,AlesiaPoint* collision);
 
 float priv__alesia__computeLineIncreaseRate(AlesiaPoint p1,AlesiaPoint p2);
 
