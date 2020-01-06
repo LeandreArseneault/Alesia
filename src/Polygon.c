@@ -83,6 +83,28 @@ void alesia__polygon__addCurve(AlesiaPolygon* polygon,float xc,float yc,float xc
     polygon->minWidth = MAX(polygon->minWidth,endX);
 }
 
+int priv__alesia__isPointInPolygon(AlesiaPolygon* polygon,float x,float y)
+{
+
+    AlesiaVertex fakeVertex;
+    fakeVertex.type = ALESIA_LINE;
+    fakeVertex.begin.y = y;
+    fakeVertex.begin.x = -100000;
+    fakeVertex.end = priv__alesia__makePoint(x,y);
+    int i;
+    unsigned int collision = 0;
+    for(i = 0; i < polygon->vertexCount;i++)
+    {
+        AlesiaPoint point[10];
+        if(priv__alesia__vertexIntersect(fakeVertex,polygon->vertex[i],&point) > 0)
+            collision++;
+    }
+
+    if(collision % 2 == 0)
+        return FALSE;
+    return TRUE;
+}
+
 AlesiaPolygon* priv__alesia__operatePolygon(AlesiaOperation op,AlesiaPolygon* base,AlesiaPolygon* operand)
 {
     AlesiaPolygon* result = alesia__polygon__createPolygon(base->initX,base->initY);
@@ -99,18 +121,39 @@ AlesiaPolygon* priv__alesia__operatePolygon(AlesiaOperation op,AlesiaPolygon* ba
             AlesiaPoint points[10];
             int collisionCount = priv__alesia__vertexIntersect(*operandVertex,*baseVertex,&points);
             int k;
+
             for(k = 0;k < collisionCount;k++)
             {
+                AlesiaPoint p1;
+                AlesiaPoint p2 = points[k];
+
+                if(k == 0)
+                    p1 = operandVertex->begin;
+                else if(k == collisionCount - 1)
+                    p1 = operandVertex->end;
+                else
+                    p1 = points[k - 1];
+
                 //we split the operand vertice
                 if(baseVertex->type == ALESIA_LINE)
                 {
+                    if(operandVertex->type == ALESIA_LINE)
+                    {
 
+                    }
+                    else if(operandVertex->type == ALESIA_BEZIER)
+                    {
+
+                    }
                 }
             }
 
             if(collisionCount == 0) //No collision we add the vertex directly
             {
-                priv__alesia__polygon__addVertex(result,*baseVertex);
+                //one condition that lines is not exactly inside the shape
+                //if the points is in the shape, we remove the vertex completely
+                if(priv__alesia__isPointInPolygon(base,operandVertex->begin.x,operandVertex->begin.y) == FALSE)
+                    priv__alesia__polygon__addVertex(result,*baseVertex);
             }
         }
     }

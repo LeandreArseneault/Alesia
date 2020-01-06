@@ -62,6 +62,8 @@ void alesia__polygon__addCurve(AlesiaPolygon* polygon,float xc,float yc,float xc
 
 void priv__alesia__polygon__addVertex(AlesiaPolygon* polygon,AlesiaVertex vertex);
 
+int priv__alesia__isPointInPolygon(AlesiaPolygon* polygon,float x,float y);
+
 AlesiaPolygon* priv__alesia__operatePolygon(AlesiaOperation op,AlesiaPolygon* base,AlesiaPolygon* operand);
 
 int priv__alesia__vertexIntersect(AlesiaVertex v1,AlesiaVertex v2,AlesiaPoint* points);
