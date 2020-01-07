@@ -110,7 +110,6 @@ AlesiaPolygon* priv__alesia__operatePolygon(AlesiaOperation op,AlesiaPolygon* ba
     AlesiaPolygon* result = alesia__polygon__createPolygon(base->initX,base->initY);
 
     int i,j;
-
     for(i = 0; i < base->vertexCount;i++)
     {
         for(j = 0;j < operand->vertexCount;j++)
@@ -121,9 +120,9 @@ AlesiaPolygon* priv__alesia__operatePolygon(AlesiaOperation op,AlesiaPolygon* ba
             AlesiaPoint points[10];
             int collisionCount = priv__alesia__vertexIntersect(*operandVertex,*baseVertex,&points);
             int k;
-
-            for(k = 0;k < collisionCount;k++)
+            for(k = 0;k < collisionCount;k += 2)
             {
+                AlesiaVertex newVertex;
                 AlesiaPoint p1;
                 AlesiaPoint p2 = points[k];
 
@@ -139,13 +138,35 @@ AlesiaPolygon* priv__alesia__operatePolygon(AlesiaOperation op,AlesiaPolygon* ba
                 {
                     if(operandVertex->type == ALESIA_LINE)
                     {
-
+                        newVertex.type = ALESIA_LINE;
+                        newVertex.begin = p1;
+                        newVertex.end = p2;
                     }
                     else if(operandVertex->type == ALESIA_BEZIER)
                     {
+                        newVertex.type = ALESIA_BEZIER;
+                        newVertex.begin = p1;
+                        newVertex.end = p2;
+                        newVertex.bezier.p1 = p1;
+                        newVertex.bezier.p4 = p2;
 
+                        AlesiaBezier split1;
+                        AlesiaBezier split2;
+
+                        float ts[5];
+                        int tCount = priv__alesia__getBezierTForValue(operandVertex->bezier.p1.x,operandVertex->bezier.p2.x,operandVertex->bezier.p3.x,operandVertex->bezier.p4.x,p1.x,&ts);
+                        if(tCount > 0)
+                        {
+                            float t = ts[0]; //so 0, but it might not be the 0 index one
+                            priv__alesia__splitBezier(operandVertex->bezier,t,&split1,&split2);
+                            newVertex.bezier.p2 = split1.p2;
+                            newVertex.bezier.p3 = split2.p3;
+                        }
                     }
                 }
+
+                priv__alesia__polygon__addVertex(result,newVertex);
+
             }
 
             if(collisionCount == 0) //No collision we add the vertex directly
@@ -153,11 +174,14 @@ AlesiaPolygon* priv__alesia__operatePolygon(AlesiaOperation op,AlesiaPolygon* ba
                 //one condition that lines is not exactly inside the shape
                 //if the points is in the shape, we remove the vertex completely
                 if(priv__alesia__isPointInPolygon(base,operandVertex->begin.x,operandVertex->begin.y) == FALSE)
+                {
                     priv__alesia__polygon__addVertex(result,*baseVertex);
+                }
             }
-        }
-    }
 
+        }
+
+    }
 
     return result;
 }
